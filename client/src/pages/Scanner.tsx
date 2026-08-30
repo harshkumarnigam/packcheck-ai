@@ -148,15 +148,13 @@ export default function Scanner() {
     setResult(null);
 
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: imagePreview,
-          fileName: uploadedFileName,
-        }),
-      });
-
+      const response = await fetch(
+  'https://packcheck-ai-api.onrender.com/api/analyze',
+  {
+    method: 'POST',
+    body: formData
+  }
+);
       const data = await response.json();
 
       if (!response.ok) {
