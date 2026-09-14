@@ -2,7 +2,11 @@ import {
   ArrowRight,
   ChevronRight,
   ClipboardCheck,
+<<<<<<< HEAD
   CloudUpload,
+=======
+  Upload,
+>>>>>>> origin/main
   FileText,
   ScanLine,
   Search,
@@ -43,8 +47,13 @@ const PROBLEMS = [
   },
 ];
 
+<<<<<<< HEAD
 const STEPS: [string, string, typeof CloudUpload, string][] = [
   ['01', 'Upload Label', CloudUpload, '/scanner'],
+=======
+const STEPS: [string, string, typeof Upload, string][] = [
+  ['01', 'Upload Label', Upload, '/scanner'],
+>>>>>>> origin/main
   ['02', 'Extract with OCR', Search, '/scanner'],
   ['03', 'Validate Rules', ClipboardCheck, '/rules'],
   ['04', 'Generate Report', FileText, '/reports'],
