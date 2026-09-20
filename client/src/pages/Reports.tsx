@@ -8,6 +8,7 @@ interface ScanReport {
   statusText: string;
   timestamp: string;
   imageThumbnail: string;
+  location?: string;
   brand?: string;
   category?: string;
   fullData: any;
@@ -131,7 +132,7 @@ export default function Reports() {
                             />
                             <div>
                               <div style={{ fontWeight: 700, color: '#f8fafc' }}>{item.productName}</div>
-                              <div style={{ fontSize: '11px', color: '#64748b' }}>{item.timestamp}</div>
+                              <div style={{ fontSize: '11px', color: '#64748b' }}>{item.timestamp} • {item.location || 'Location unavailable'}</div>
                             </div>
                           </div>
                         </td>
@@ -188,6 +189,7 @@ export default function Reports() {
                 <div style={{ marginBottom: '14px' }}>
                   <h4 style={{ margin: '0 0 2px 0', fontSize: '16px', color: '#f8fafc' }}>{selectedReport.productName}</h4>
                   <div style={{ fontSize: '12px', color: '#94a3b8' }}>{selectedReport.fullData?.brand || 'PepsiCo India Holdings'} • {selectedReport.timestamp}</div>
+                  <div style={{ fontSize: '11px', color: '#38bdf8', marginTop: '4px' }}>Inspection location: {selectedReport.location || 'Location unavailable'}</div>
                 </div>
 
                 {/* Verdict Card */}

@@ -4,11 +4,28 @@ import cors from 'cors';
 import { GoogleGenAI, createPartFromBase64 } from '@google/genai';
 
 const app = express();
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN ? process.env.CLIENT_ORIGIN.split(',') : true }));
+app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: true, limit: '15mb' }));
+
+const requestLog = new Map();
+const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT = 20;
+
+function rateLimit(req, res, next) {
+  const now = Date.now();
+  const key = req.ip || 'unknown';
+  const recent = (requestLog.get(key) || []).filter((time) => now - time < RATE_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT) {
+    return res.status(429).json({ error: 'Too many analysis requests. Please try again in a minute.' });
+  }
+  recent.push(now);
+  requestLog.set(key, recent);
+  return next();
+}
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+// Using a real, stable model fallback. Do NOT use 3.6.
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 const PORT = Number(process.env.PORT) || 4000;
 
@@ -41,6 +58,7 @@ const ANALYSIS_JSON_SCHEMA = {
     },
     harmfulItems: {
       type: 'array',
+      maxItems: 5,
       items: {
         type: 'object',
         properties: {
@@ -54,6 +72,7 @@ const ANALYSIS_JSON_SCHEMA = {
     },
     healthyAlternatives: {
       type: 'array',
+      maxItems: 2,
       items: {
         type: 'object',
         properties: {
@@ -68,6 +87,7 @@ const ANALYSIS_JSON_SCHEMA = {
     },
     ingredients: {
       type: 'array',
+      maxItems: 10,
       items: {
         type: 'object',
         properties: {
@@ -81,6 +101,7 @@ const ANALYSIS_JSON_SCHEMA = {
     },
     nutritionTable: {
       type: 'array',
+      maxItems: 10,
       items: {
         type: 'object',
         properties: {
@@ -94,6 +115,7 @@ const ANALYSIS_JSON_SCHEMA = {
     },
     declarations: {
       type: 'array',
+      maxItems: 8,
       items: {
         type: 'object',
         properties: {
@@ -104,6 +126,10 @@ const ANALYSIS_JSON_SCHEMA = {
         required: ['name', 'status', 'details'],
       },
     },
+    barcode: { type: 'string' },
+    qrCode: { type: 'string' },
+    agmarkMark: { type: 'string' },
+    bisIsiMark: { type: 'string' },
   },
   required: [
     'isFoodPackaging',
@@ -120,20 +146,23 @@ const ANALYSIS_JSON_SCHEMA = {
   ],
 };
 
-const ANALYSIS_PROMPT = `You are PackCheck AI, an expert in Indian packaged food label analysis (FSSAI compliance and consumer health).
+const ANALYSIS_PROMPT = `You are PackCheck AI for Indian packaged food labels. Analyze the image and return only the required JSON.
 
-Analyze the uploaded food packaging image. Read visible text from the label (product name, ingredients, nutrition facts, MRP, FSSAI license, batch, net weight, declarations).
+Read visible:
+product name, brand, ingredients, nutrition, MRP, FSSAI license, batch number, net weight, declarations.
 
 Rules:
-- If the image is NOT a packaged food product label, set isFoodPackaging to false and still return the schema with best-effort placeholder strings.
-- Score 0-100 for overall health/compliance (higher = healthier/more compliant).
-- harmfulItems: flag palm oil, excess sodium, added sugar, MSG/flavor enhancers, artificial colors, trans fats, etc. Use level "HIGH RISK" (color #ef4444), "MODERATE" (#f59e0b), or "CRITICAL RISK" (#ef4444).
-- healthyAlternatives: suggest 2 realistic Indian-market healthier swaps.
-- ingredients: list main ingredients with estimated QID % if visible, else "—".
-- nutritionTable: per 100g and per serve where visible; status like "Safe", "High Risk", "Warning".
-- declarations: FSSAI license, veg/non-veg, allergen, QID list checks.
-- verdict colors: score >= 70 use green (#22c55e), 50-69 amber (#f59e0b), below 50 red (#ef4444). Set matching bgColor (rgba with 0.14 alpha) and borderColor.
-- Use ₹ for MRP when applicable. Be factual based on what you can read; say "Not detected" for missing fields.`;
+- If this is not packaged food, set isFoodPackaging=false.
+- Do not invent unreadable information. Use "Not detected".
+- Score 0-100.
+- Flag important harmful ingredients and risks.
+- Give 2 healthier alternatives.
+- Use visible nutrition values.
+- Check FSSAI, veg/non-veg, allergens and declarations.
+- Look specifically for AGMARK, BIS/ISI, barcode, and QR marks. Use "Not detected" when unreadable.
+- Use ₹ for MRP.
+- Keep arrays concise.
+- Return factual information only.`;
 
 function parseImagePayload(image) {
   const match = String(image).match(/^data:([^;]+);base64,(.+)$/);
@@ -177,29 +206,41 @@ function normalizeReport(raw) {
     ingredients: Array.isArray(raw.ingredients) ? raw.ingredients : [],
     nutritionTable: Array.isArray(raw.nutritionTable) ? raw.nutritionTable : [],
     declarations: Array.isArray(raw.declarations) ? raw.declarations : [],
+    barcode: raw.barcode || '',
+    qrCode: raw.qrCode || '',
+    agmarkMark: raw.agmarkMark || '',
+    bisIsiMark: raw.bisIsiMark || '',
   };
 }
 
-async function analyzeWithGemini(base64Data, mimeType, fileName) {
+async function analyzeWithGemini(base64Data, mimeType, fileName, language = 'English') {
   const fileHint = fileName ? `\nOriginal filename: ${fileName}` : '';
+  const languageHint = `\nRead English, Hindi, or Hinglish text as requested. Return extracted values in ${language}.`;
   const response = await ai.models.generateContent({
     model: GEMINI_MODEL,
     contents: [
       createPartFromBase64(base64Data, mimeType),
-      `${ANALYSIS_PROMPT}${fileHint}`,
+      `${ANALYSIS_PROMPT}${languageHint}${fileHint}`,
     ],
     config: {
       responseMimeType: 'application/json',
       responseJsonSchema: ANALYSIS_JSON_SCHEMA,
+      maxOutputTokens: 3000,
     },
   });
 
   const text = response.text;
+  
   if (!text) {
     throw new Error('Gemini returned an empty response.');
   }
 
-  return normalizeReport(JSON.parse(text));
+  try {
+    return normalizeReport(JSON.parse(text));
+  } catch (parseError) {
+    console.error('Invalid Gemini JSON:', text);
+    throw new Error('Gemini returned incomplete JSON. Please try again.');
+  }
 }
 
 app.get('/api/health', (req, res) => {
@@ -211,11 +252,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.post('/api/analyze', async (req, res) => {
+app.post('/api/analyze', rateLimit, async (req, res) => {
   try {
-    const { image, fileName } = req.body;
-    if (!image) {
+    const { image, fileName, language } = req.body;
+    if (!image || typeof image !== 'string') {
       return res.status(400).json({ error: 'No image provided' });
+    }
+    if (image.length > 14_000_000) {
+      return res.status(413).json({ error: 'Image is too large. Upload a compressed image under 10 MB.' });
     }
 
     if (!ai) {
@@ -225,7 +269,7 @@ app.post('/api/analyze', async (req, res) => {
     }
 
     const { mimeType, data } = parseImagePayload(image);
-    const report = await analyzeWithGemini(data, mimeType, fileName || '');
+    const report = await analyzeWithGemini(data, mimeType, fileName || '', language || 'English');
 
     if (!report.isFoodPackaging) {
       return res.status(422).json({

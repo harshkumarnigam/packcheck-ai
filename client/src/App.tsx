@@ -7,6 +7,34 @@ import Dashboard from './pages/Dashboard';
 import Reports from './pages/Reports';
 import Rules from './pages/Rules';
 import About from './pages/About';
+import { samples } from './data/samples';
+
+function toScannerSample(index: number) {
+  const sample = samples[index] ?? samples[0];
+  return {
+    ...sample,
+    brand: 'PackCheck demo',
+    category: 'Packaged food',
+    harmfulItems: [],
+    healthyAlternatives: [],
+    ingredients: [],
+    nutritionTable: [],
+    declarations: sample.fields.map((field) => ({
+      name: field.name,
+      details: field.value,
+      status: field.status,
+    })),
+    verdict: {
+      title: sample.status,
+      subtext: sample.notes,
+      color: sample.score >= 90 ? '#4ade80' : sample.score >= 70 ? '#fbbf24' : '#f87171',
+      bgColor: 'rgba(56, 189, 248, 0.08)',
+      borderColor: 'rgba(56, 189, 248, 0.35)',
+    },
+    fssaiLicense: 'Demo data',
+    batchNumber: 'Demo data',
+  };
+}
 
 export default function App() {
   const navigate = useNavigate();
@@ -25,7 +53,8 @@ export default function App() {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const loadSample = (_index: number) => {
+  const loadSample = (index: number) => {
+    localStorage.setItem('packcheck_demo_sample', JSON.stringify(toScannerSample(index)));
     navigate('/scanner');
   };
 

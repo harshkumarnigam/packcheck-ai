@@ -1,21 +1,18 @@
 import {
   ArrowRight,
   ChevronRight,
-  ClipboardCheck,
-<<<<<<< HEAD
-  CloudUpload,
-=======
-  Upload,
->>>>>>> origin/main
-  FileText,
-  ScanLine,
-  Search,
-  ShieldCheck,
+  CheckSquare,
+  UploadCloud,
+  FileText as FileTextIcon,
+  Scan,
+  Shield,
   Zap,
   Clock,
   AlertTriangle,
   UserX,
   TrendingDown,
+  Search,
+  type LucideIcon,
 } from 'lucide-react';
 import type { NavigateFunction } from 'react-router-dom';
 
@@ -24,7 +21,13 @@ interface HomeProps {
   loadSample: (index: number) => void;
 }
 
-const PROBLEMS = [
+interface ProblemItem {
+  title: string;
+  body: string;
+  Icon: LucideIcon;
+}
+
+const PROBLEMS: ProblemItem[] = [
   {
     title: 'Manual Verification',
     body: 'Inspecting every field by hand takes time.',
@@ -47,16 +50,13 @@ const PROBLEMS = [
   },
 ];
 
-<<<<<<< HEAD
-const STEPS: [string, string, typeof CloudUpload, string][] = [
-  ['01', 'Upload Label', CloudUpload, '/scanner'],
-=======
-const STEPS: [string, string, typeof Upload, string][] = [
-  ['01', 'Upload Label', Upload, '/scanner'],
->>>>>>> origin/main
+type StepItem = [string, string, LucideIcon, string];
+
+const STEPS: StepItem[] = [
+  ['01', 'Upload Label', UploadCloud, '/scanner'],
   ['02', 'Extract with OCR', Search, '/scanner'],
-  ['03', 'Validate Rules', ClipboardCheck, '/rules'],
-  ['04', 'Generate Report', FileText, '/reports'],
+  ['03', 'Validate Rules', CheckSquare, '/rules'],
+  ['04', 'Generate Report', FileTextIcon, '/reports'],
 ];
 
 export default function Home({ nav, loadSample }: HomeProps) {
@@ -84,16 +84,16 @@ export default function Home({ nav, loadSample }: HomeProps) {
           </div>
           <div className="trust">
             <span>
-              <ShieldCheck /> OCR Powered
+              <Shield /> OCR Powered
             </span>
             <span>
               <Zap /> AI Assisted
             </span>
             <span>
-              <ClipboardCheck /> Rule-Based
+              <CheckSquare /> Rule-Based
             </span>
             <span>
-              <FileText /> Instant Report
+              <FileTextIcon /> Instant Report
             </span>
           </div>
         </div>
@@ -103,6 +103,8 @@ export default function Home({ nav, loadSample }: HomeProps) {
           className="hero-card interactive-card" 
           onClick={() => nav('/scanner')}
           title="Click to start Scanning"
+          role="button"
+          tabIndex={0}
         >
           <div className="scan-top">
             <span>LIVE ANALYSIS</span>
@@ -122,7 +124,7 @@ export default function Home({ nav, loadSample }: HomeProps) {
             </div>
 
             <div className="scan-ring">
-              <ScanLine size={32} />
+              <Scan size={32} />
             </div>
 
             {/* OCR Detection Highlights */}
@@ -166,6 +168,8 @@ export default function Home({ nav, loadSample }: HomeProps) {
               onClick={() => nav('/scanner')}
               style={{ cursor: 'pointer' }}
               title="Click to scan product"
+              role="button"
+              tabIndex={0}
             >
               <div className="feature-icon">
                 <Icon size={20} />
@@ -192,6 +196,8 @@ export default function Home({ nav, loadSample }: HomeProps) {
               onClick={() => nav(path)}
               style={{ cursor: 'pointer' }}
               title={`Open ${title}`}
+              role="button"
+              tabIndex={0}
             >
               <span>{number}</span>
               <Icon size={24} />
@@ -207,7 +213,7 @@ export default function Home({ nav, loadSample }: HomeProps) {
         <div className="demo-banner">
           <div>
             <span className="eyebrow">JUDGE DEMO</span>
-            <h2>See the full workflow in 30–60 seconds.</h2>
+            <h2>See the full workflow in 30-60 seconds.</h2>
             <p>Choose a sample product and jump straight to OCR, compliance score, violations and recommendations.</p>
           </div>
           <button className="primary" onClick={() => loadSample(1)}>
