@@ -100,7 +100,7 @@ export default function Scanner() {
           });
         },
         () => {},
-        { timeout: 8000 }
+        { enableHighAccuracy: false, timeout: 1500, maximumAge: 600000 }
       );
     }
 
@@ -219,6 +219,7 @@ export default function Scanner() {
     if (presetKey === 'kurkure') fileName = 'kurkure_masala_munch.jpg';
     if (presetKey === 'chips') fileName = 'lays_potato_chips.jpg';
     if (presetKey === 'ghee') fileName = 'amul_cow_ghee.jpg';
+    if (presetKey === 'water') fileName = 'bisleri_packaged_drinking_water.jpg';
 
     setUploadedFileName(fileName);
     setImagePreview('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260"><rect width="100%" height="100%" fill="%230F172A"/><text x="50%" y="45%" fill="%233B82F6" font-size="20" font-family="sans-serif" font-weight="bold" text-anchor="middle">PACKCHECK SAMPLE</text><text x="50%" y="60%" fill="%2394A3B8" font-size="14" font-family="sans-serif" text-anchor="middle">' + fileName.replace('.jpg', '').toUpperCase() + '</text></svg>');
@@ -570,7 +571,7 @@ export default function Scanner() {
                 onClick={() => loadPresetSample('jam')}
                 style={{ padding: '8px', backgroundColor: '#0F172A', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
               >
-                🍓 Mixed Fruit Jam (High Sugar)
+                🍓 Mixed Fruit Jam (Sugar Alert)
               </button>
               <button
                 onClick={() => loadPresetSample('toffee')}
@@ -582,13 +583,25 @@ export default function Scanner() {
                 onClick={() => loadPresetSample('kurkure')}
                 style={{ padding: '8px', backgroundColor: '#0F172A', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
               >
-                🌶️ Kurkure Masala (High Sodium)
+                🌶️ Kurkure Munch (High Sodium)
+              </button>
+              <button
+                onClick={() => loadPresetSample('chips')}
+                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
+              >
+                🥔 Lay's Chips (Sodium Check)
               </button>
               <button
                 onClick={() => loadPresetSample('ghee')}
                 style={{ padding: '8px', backgroundColor: '#0F172A', color: '#22C55E', border: '1px solid rgba(34, 197, 94, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
               >
                 🧈 Amul Cow Ghee (AGMARK Pass)
+              </button>
+              <button
+                onClick={() => loadPresetSample('water')}
+                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
+              >
+                💧 Packaged Water (BIS IS 14543)
               </button>
             </div>
           </div>

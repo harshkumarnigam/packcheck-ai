@@ -34,22 +34,43 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
 
   return (
     <>
-      <header style={{
+      <header className="app-navbar-header" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '14px 20px',
+        padding: '12px 20px',
         backgroundColor: '#0b1120',
         borderBottom: '1px solid #1e293b',
         position: 'sticky',
         top: 0,
-        zIndex: 100
+        zIndex: 100,
+        maxWidth: '100%',
+        boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-            <span style={{ fontSize: '20px' }}>🛡️</span>
-            <span style={{ fontSize: '18px', fontWeight: 800, color: '#38bdf8' }}>PackCheck AI</span>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>TechVortex</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', minWidth: 0 }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
+            <div style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '9px',
+              background: 'linear-gradient(135deg, #0284c7, #38bdf8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '19px',
+              boxShadow: '0 2px 10px rgba(56, 189, 248, 0.3)',
+              flexShrink: 0
+            }}>
+              🛡️
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, flexShrink: 0 }}>
+              <span style={{ fontSize: '17px', fontWeight: 900, color: '#38bdf8', letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>
+                PackCheck AI
+              </span>
+              <span style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase' }}>
+                TechVortex
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

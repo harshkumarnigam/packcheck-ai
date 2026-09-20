@@ -297,7 +297,13 @@ footer small { color: var(--muted); }
   .scanner-panel select, .scanner-panel input, .scanner-panel textarea { max-width: 100%; }
 }
 
-@media (max-width: 768px) {
+.app-navbar-header {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+@media (max-width: 960px) {
   .desktop-nav { display: none !important; }
   .mobile-hamburger-btn { display: flex !important; }
 }
