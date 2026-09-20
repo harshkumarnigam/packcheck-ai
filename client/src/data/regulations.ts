@@ -26,6 +26,9 @@ export interface RegulationCheck {
 
 export interface ProductAnalysisData {
   productName: string;
+  productConfidence?: number;
+  identificationStatus?: 'IDENTIFIED' | 'UNSURE';
+  ocrText?: string;
   category?: string;
   brand?: string;
   score: number;

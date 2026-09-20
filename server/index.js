@@ -1,7 +1,12 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenAI, createPartFromBase64 } from '@google/genai';
+import dotenv from 'dotenv';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const serverDirectory = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(serverDirectory, '.env') });
 
 const app = express();
 app.use(cors({ origin: process.env.CLIENT_ORIGIN ? process.env.CLIENT_ORIGIN.split(',') : true }));
@@ -36,6 +41,9 @@ const ANALYSIS_JSON_SCHEMA = {
   properties: {
     isFoodPackaging: { type: 'boolean' },
     productName: { type: 'string' },
+    productConfidence: { type: 'number' },
+    identificationStatus: { type: 'string' },
+    ocrText: { type: 'string' },
     category: { type: 'string' },
     brand: { type: 'string' },
     fssaiLicense: { type: 'string' },
@@ -134,6 +142,9 @@ const ANALYSIS_JSON_SCHEMA = {
   required: [
     'isFoodPackaging',
     'productName',
+    'productConfidence',
+    'identificationStatus',
+    'ocrText',
     'category',
     'brand',
     'score',
@@ -148,12 +159,15 @@ const ANALYSIS_JSON_SCHEMA = {
 
 const ANALYSIS_PROMPT = `You are PackCheck AI for Indian packaged food labels. Analyze the image and return only the required JSON.
 
-Read visible:
-product name, brand, ingredients, nutrition, MRP, FSSAI license, batch number, net weight, declarations.
+First read the label text as OCR, then use that extracted text to perform the compliance analysis.
+Return the most important OCR text in ocrText, identify the product only from visible evidence, and give productConfidence from 0 to 100.
+Read visible: product name, brand, ingredients, nutrition, MRP, FSSAI license, batch number, net weight, declarations.
 
 Rules:
 - If this is not packaged food, set isFoodPackaging=false.
 - Do not invent unreadable information. Use "Not detected".
+- If the product name is unclear, set productName to "Not detected", identificationStatus to "UNSURE", and productConfidence below 60. Never guess a brand or product.
+- Set identificationStatus to "IDENTIFIED" only when the visible label supports the product name.
 - Score 0-100.
 - Flag important harmful ingredients and risks.
 - Give 2 healthier alternatives.
@@ -184,7 +198,10 @@ function normalizeReport(raw) {
 
   return {
     isFoodPackaging: raw.isFoodPackaging !== false,
-    productName: raw.productName || 'Unknown Product',
+    productName: raw.productName || 'Not detected',
+    productConfidence: Math.max(0, Math.min(100, Math.round(Number(raw.productConfidence) || 0))),
+    identificationStatus: raw.identificationStatus === 'IDENTIFIED' ? 'IDENTIFIED' : 'UNSURE',
+    ocrText: raw.ocrText || 'No readable text returned.',
     category: raw.category || 'Packaged Food',
     brand: raw.brand || 'Not detected',
     fssaiLicense: raw.fssaiLicense || 'Not detected',

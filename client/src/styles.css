@@ -137,6 +137,16 @@ p { color: var(--muted); line-height: 1.65; }
 .scanner-workspace { width: 100%; }
 .scanner-panel { min-width: 0; }
 .scanner-error { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 14px; padding: 11px 12px; border: 1px solid rgba(248,113,113,.45); border-radius: 9px; background: rgba(248,113,113,.1); color: #fca5a5; font-size: 12px; line-height: 1.45; }
+.analysis-stages { display: grid; gap: 9px; max-width: 330px; margin: 22px auto 0; text-align: left; }
+.analysis-stage { display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface2); color: var(--text); font-size: 12px; }
+.analysis-stage span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: white; font-size: 10px; font-weight: 800; }
+.identification-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 9px; color: var(--muted); font-size: 11px; }
+.confidence-good, .confidence-review { padding: 4px 7px; border-radius: 6px; font-weight: 800; }
+.confidence-good { color: var(--green); background: rgba(34,197,94,.12); }
+.confidence-review { color: var(--yellow); background: rgba(245,158,11,.12); }
+.ocr-preview { margin: 0 0 16px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface2); color: var(--text); font-size: 12px; }
+.ocr-preview summary { padding: 10px 12px; cursor: pointer; font-weight: 800; color: var(--primary); }
+.ocr-preview p { margin: 0; padding: 0 12px 12px; white-space: pre-wrap; max-height: 150px; overflow: auto; font-size: 11px; }
 .upload-card, .result-card { min-height: 620px; }
 .dropzone { border: 1.5px dashed #4f8cff; border-radius: 17px; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: rgba(79,140,255,.035); cursor: pointer; overflow: hidden; }
 .dropzone.drag { background: rgba(79,140,255,.12); }
@@ -285,6 +295,11 @@ footer small { color: var(--muted); }
   .scanner-result-panel .score-ring strong { font-size: 23px; }
   .scanner-result-panel button { min-height: 38px; }
   .scanner-panel select, .scanner-panel input, .scanner-panel textarea { max-width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .mobile-hamburger-btn { display: flex !important; }
 }
 
 @media print {
