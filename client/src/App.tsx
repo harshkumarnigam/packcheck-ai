@@ -75,6 +75,7 @@ export default function App() {
         <Route path="/reports" element={<Reports />} />
         <Route path="/rules" element={<Rules />} />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<Home nav={navigate} loadSample={loadSample} />} />
       </Routes>
 
       <Footer nav={navigate} />
