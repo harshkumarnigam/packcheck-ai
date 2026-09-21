@@ -49,6 +49,11 @@ export default function App() {
     localStorage.setItem('packcheck_theme', theme);
   }, [theme]);
 
+  // Scroll to top immediately on route change so pages open at the top on 1-click
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };

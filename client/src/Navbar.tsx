@@ -255,6 +255,58 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
           </div>
         </div>
       )}
+
+      {/* Persistent 1-Click Mobile Bottom Navigation Bar */}
+      <nav className="mobile-bottom-nav" style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#0b1120',
+        borderTop: '1px solid #1e293b',
+        display: 'none', // Shown on mobile via styles.css
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: '6px 4px 10px',
+        zIndex: 9999,
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.4)'
+      }}>
+        {navLinks.map((link) => {
+          const isActive = currentPath === link.path;
+          const icons: Record<string, string> = {
+            '/': '🏠',
+            '/scanner': '📷',
+            '/dashboard': '📊',
+            '/reports': '📋',
+            '/rules': '⚖️',
+            '/about': 'ℹ️',
+          };
+          return (
+            <Link
+              key={link.path}
+              to={link.path}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '2px',
+                textDecoration: 'none',
+                color: isActive ? '#38bdf8' : '#94a3b8',
+                fontSize: '11px',
+                fontWeight: isActive ? 800 : 500,
+                padding: '4px 6px',
+                borderRadius: '8px',
+                backgroundColor: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                flex: 1,
+                textAlign: 'center'
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>{icons[link.path] || '🔗'}</span>
+              <span>{link.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </>
   );
 }

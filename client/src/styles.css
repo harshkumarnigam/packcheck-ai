@@ -303,9 +303,11 @@ footer small { color: var(--muted); }
   overflow-x: clip;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 768px) {
   .desktop-nav { display: none !important; }
   .mobile-hamburger-btn { display: flex !important; }
+  .mobile-bottom-nav { display: flex !important; }
+  body, .app { padding-bottom: 70px !important; }
 }
 
 @media print {
