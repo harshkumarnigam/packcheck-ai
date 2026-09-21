@@ -534,7 +534,7 @@ export default function Scanner() {
                 <button onClick={() => fileInputRef.current?.click()} style={{ flex: 1, padding: '7px', backgroundColor: '#0F172A', color: '#fff', border: '1px solid #334155', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}>
                   Change Image
                 </button>
-                <button onClick={handleClear} style={{ padding: '7px 14px', backgroundColor: '#0F172A', color: '#EF4444', border: '1px solid #334155', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}>
+                <button onClick={handleClear} style={{ padding: '7px 14px', backgroundColor: '#0F172A', color: '#94A3B8', border: '1px solid #334155', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}>
                   Clear
                 </button>
               </div>
@@ -546,14 +546,14 @@ export default function Scanner() {
                   width: '100%',
                   marginTop: '12px',
                   padding: '13px',
-                  backgroundColor: '#3B82F6',
+                  backgroundColor: '#0284C7',
                   color: '#FFFFFF',
                   fontWeight: 900,
                   border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  boxShadow: '0 4px 14px rgba(59, 130, 246, 0.3)'
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.3)'
                 }}
               >
                 {loading ? '🔍 Extracting OCR & Rules...' : '⚡ Scan Product Now'}
@@ -569,9 +569,9 @@ export default function Scanner() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
               <button
                 onClick={() => loadPresetSample('jam')}
-                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
+                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#FB923C', border: '1px solid rgba(251, 146, 60, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
               >
-                🍓 Mixed Fruit Jam (Sugar Alert)
+                🍓 Mixed Fruit Jam (High Sugar)
               </button>
               <button
                 onClick={() => loadPresetSample('toffee')}
@@ -581,9 +581,9 @@ export default function Scanner() {
               </button>
               <button
                 onClick={() => loadPresetSample('kurkure')}
-                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
+                style={{ padding: '8px', backgroundColor: '#0F172A', color: '#FB923C', border: '1px solid rgba(251, 146, 60, 0.4)', borderRadius: '6px', fontSize: '11px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
               >
-                🌶️ Kurkure Munch (High Sodium)
+                🌶️ Kurkure Munch (Savory Snack)
               </button>
               <button
                 onClick={() => loadPresetSample('chips')}
@@ -660,18 +660,18 @@ export default function Scanner() {
             </div>
           )}
 
-          {/* Unidentified Error Handling */}
+          {/* Unidentified Guidance Handling */}
           {!loading && unidentifiedError && (
-            <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '2px dashed #EF4444', borderRadius: '12px' }}>
-              <div style={{ fontSize: '48px', marginBottom: '12px' }}>🚫</div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#EF4444', margin: '0 0 6px 0' }}>
-                Unable to Identify Product
+            <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '2px dashed rgba(245, 158, 11, 0.4)', borderRadius: '12px' }}>
+              <div style={{ fontSize: '42px', marginBottom: '12px' }}>🔍</div>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#F59E0B', margin: '0 0 6px 0' }}>
+                Clearer Label Image Needed
               </h2>
-              <p style={{ fontSize: '13px', color: '#FCA5A5', maxWidth: '420px', margin: '0 auto 16px auto', lineHeight: '1.5' }}>
+              <p style={{ fontSize: '13px', color: '#CBD5E1', maxWidth: '420px', margin: '0 auto 16px auto', lineHeight: '1.5' }}>
                 {unidentifiedError}
               </p>
-              <div style={{ backgroundColor: '#0F172A', padding: '10px 16px', borderRadius: '8px', display: 'inline-block', fontSize: '12px', color: '#3B82F6', fontWeight: 700 }}>
-                📸 Tip: Ensure the label text is in focus with clear lighting.
+              <div style={{ backgroundColor: '#0F172A', padding: '10px 16px', borderRadius: '8px', display: 'inline-block', fontSize: '12px', color: '#38BDF8', fontWeight: 700 }}>
+                📸 Tip: Ensure the label text is in focus with good lighting.
               </div>
             </div>
           )}
@@ -688,7 +688,7 @@ export default function Scanner() {
                   <div style={{ fontSize: '20px', fontWeight: 900, color: '#F8FAFC', margin: '2px 0' }}>
                     {result.productName}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#3B82F6' }}>
+                  <div style={{ fontSize: '12px', color: '#38BDF8' }}>
                     {result.brand} • {result.category}
                   </div>
                 </div>
@@ -711,7 +711,7 @@ export default function Scanner() {
                     onClick={() => setShowOcrPreview(!showOcrPreview)}
                     style={{ width: '100%', padding: '10px 14px', backgroundColor: 'transparent', border: 'none', color: '#94A3B8', fontSize: '12px', fontWeight: 700, display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
                   >
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#3B82F6' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#38BDF8' }}>
                       <Eye size={14} /> 📄 Raw OCR Text Extracted ({result.rawOcrText.split('\n').length} lines)
                     </span>
                     {showOcrPreview ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -727,7 +727,7 @@ export default function Scanner() {
               {/* Better Result Screen: Compliance Score, Passed & Issues Checklist */}
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(140px, 180px) 1fr', gap: '16px', marginBottom: '16px', alignItems: 'center', backgroundColor: '#0F172A', padding: '16px', borderRadius: '12px', border: '1px solid #334155' }}>
                 <div style={{ textAlign: 'center', borderRight: '1px solid #334155', paddingRight: '12px' }}>
-                  <div style={{ fontSize: '38px', fontWeight: 900, color: result.score >= 80 ? '#22C55E' : result.score >= 60 ? '#F59E0B' : '#EF4444', lineHeight: 1 }}>
+                  <div style={{ fontSize: '38px', fontWeight: 900, color: result.score >= 80 ? '#22C55E' : result.score >= 60 ? '#F59E0B' : '#FB923C', lineHeight: 1 }}>
                     {result.score}<span style={{ fontSize: '16px', color: '#64748B' }}>/100</span>
                   </div>
                   <div style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 800, marginTop: '4px', textTransform: 'uppercase' }}>

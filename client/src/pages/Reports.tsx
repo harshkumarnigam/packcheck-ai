@@ -116,11 +116,11 @@ export default function Reports() {
           mrp: '₹ 20.00 (Incl. of all taxes)',
           netWeight: '75 g',
           verdict: {
-            title: 'HIGH SODIUM & PALM OIL AUDIT ⚠️',
-            subtext: 'Contains Palmolein oil and synthetic flavor enhancers (INS 627, 631). Review for HFSS front-of-pack rating.',
-            color: '#ef4444',
-            bgColor: 'rgba(239, 68, 68, 0.12)',
-            borderColor: '#ef4444',
+            title: 'NUTRITIONAL ADVISORY • HFSS REVIEW 💡',
+            subtext: 'Contains Palmolein oil and synthetic flavor enhancers (INS 627, 631). Review for front-of-pack HFSS clarity.',
+            color: '#fb923c',
+            bgColor: 'rgba(251, 146, 60, 0.12)',
+            borderColor: '#fb923c',
           },
           harmfulItems: [
             { ingredient: 'Refined Palmolein Oil (48% Saturated Fat)', level: 'HIGH RISK', problem: 'Elevated saturated fatty acids linked to LDL cholesterol.' },
@@ -340,9 +340,9 @@ export default function Reports() {
               onClick={handleClearAll}
               style={{
                 padding: '8px 12px',
-                backgroundColor: 'rgba(239, 68, 68, 0.12)',
-                color: '#f87171',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
+                backgroundColor: '#1e293b',
+                color: '#94a3b8',
+                border: '1px solid #334155',
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
@@ -439,13 +439,13 @@ export default function Reports() {
                 borderRadius: '20px',
                 fontSize: '12px',
                 fontWeight: 700,
-                border: `1px solid ${filter === 'violation' ? '#f87171' : '#334155'}`,
-                backgroundColor: filter === 'violation' ? 'rgba(248, 113, 113, 0.15)' : '#0f172a',
-                color: filter === 'violation' ? '#f87171' : '#94a3b8',
+                border: `1px solid ${filter === 'violation' ? '#fb923c' : '#334155'}`,
+                backgroundColor: filter === 'violation' ? 'rgba(251, 146, 60, 0.15)' : '#0f172a',
+                color: filter === 'violation' ? '#fb923c' : '#94a3b8',
                 cursor: 'pointer'
               }}
             >
-              🔴 High Risk / Violations ({reports.filter(r => r.score < 65).length})
+              🟠 Needs Review ({reports.filter(r => r.score < 65).length})
             </button>
           </div>
 

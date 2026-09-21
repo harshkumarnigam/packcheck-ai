@@ -154,9 +154,9 @@ function extractHarmfulAdditives(text: string) {
   if (sugarMatch && parseFloat(sugarMatch[1]) > 40) {
     harmful.push({
       ingredient: `Excessive Sugar (${sugarMatch[1]}g / 100g)`,
-      level: 'HIGH RISK',
-      color: '#ef4444',
-      problem: 'Very high simple sugar concentration (>40%). Triggers severe blood glucose spikes and dental decay.',
+      level: 'ATTENTION',
+      color: '#fb923c',
+      problem: 'High simple sugar concentration (>40%). Review against ICMR-NIN recommended thresholds.',
     });
   }
 
@@ -164,9 +164,9 @@ function extractHarmfulAdditives(text: string) {
   if (lower.includes('glucose-fruct') || lower.includes('fructose syrup') || lower.includes('corn syrup') || lower.includes('hfcs')) {
     harmful.push({
       ingredient: 'Glucose-Fructose Syrup (HFCS)',
-      level: 'HIGH RISK',
-      color: '#ef4444',
-      problem: 'Metabolized directly by the liver into fatty triglycerides. Strongly linked to non-alcoholic fatty liver disease (NAFLD).',
+      level: 'ATTENTION',
+      color: '#fb923c',
+      problem: 'Refined sweetening agent. Consider natural fruit purée or jaggery alternatives.',
     });
   }
 
@@ -174,9 +174,9 @@ function extractHarmfulAdditives(text: string) {
   if (lower.includes('palmolein') || lower.includes('palm oil') || lower.includes('fractionated palm')) {
     harmful.push({
       ingredient: 'Palmolein / Palm Oil',
-      level: 'HIGH RISK',
-      color: '#ef4444',
-      problem: 'Contains ~48% saturated fatty acids. Associated with elevated LDL cholesterol and arterial stiffness.',
+      level: 'ATTENTION',
+      color: '#fb923c',
+      problem: 'Contains ~48% saturated fatty acids. Transparent front-of-pack labeling recommended.',
     });
   }
 

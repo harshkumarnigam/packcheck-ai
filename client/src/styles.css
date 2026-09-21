@@ -15,7 +15,7 @@ button { cursor: pointer; }
   --primary: #2563eb;
   --green: #16a34a;
   --yellow: #d97706;
-  --red: #dc2626;
+  --red: #ea580c;
   --shadow: 0 18px 60px rgba(15,30,50,.09);
 }
 
@@ -29,7 +29,7 @@ button { cursor: pointer; }
   --primary: #4f8cff;
   --green: #36d399;
   --yellow: #fbbf24;
-  --red: #fb7185;
+  --red: #fb923c;
   --shadow: 0 18px 70px rgba(0,0,0,.28);
 }
 
