@@ -170,12 +170,13 @@ export default function Scanner() {
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const dataUri = canvas.toDataURL('image/jpeg', 0.75);
+      const dataUri = canvas.toDataURL('image/jpeg', 0.8);
       setImagePreview(dataUri);
       setUploadedFileName('camera_label_scan.jpg');
       setResult(null);
       setUnidentifiedError(null);
       stopCamera();
+      triggerAnalysis('camera_label_scan.jpg', dataUri);
     }
   };
 
@@ -183,7 +184,8 @@ export default function Scanner() {
     stopCamera();
     const file = e.target.files?.[0];
     if (file) {
-      setUploadedFileName(file.name);
+      const fileName = file.name;
+      setUploadedFileName(fileName);
       setResult(null);
       setUnidentifiedError(null);
       const reader = new FileReader();
@@ -202,8 +204,9 @@ export default function Scanner() {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
-          const compressed = canvas.toDataURL('image/jpeg', 0.75);
+          const compressed = canvas.toDataURL('image/jpeg', 0.8);
           setImagePreview(compressed);
+          triggerAnalysis(fileName, compressed);
         };
         img.src = event.target?.result as string;
       };
@@ -221,9 +224,10 @@ export default function Scanner() {
     if (presetKey === 'ghee') fileName = 'amul_cow_ghee.jpg';
     if (presetKey === 'water') fileName = 'bisleri_packaged_drinking_water.jpg';
 
+    const sampleImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260"><rect width="100%" height="100%" fill="%230F172A"/><text x="50%" y="45%" fill="%2338BDF8" font-size="20" font-family="sans-serif" font-weight="bold" text-anchor="middle">PACKCHECK SAMPLE</text><text x="50%" y="60%" fill="%2394A3B8" font-size="14" font-family="sans-serif" text-anchor="middle">' + fileName.replace('.jpg', '').toUpperCase() + '</text></svg>';
     setUploadedFileName(fileName);
-    setImagePreview('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260"><rect width="100%" height="100%" fill="%230F172A"/><text x="50%" y="45%" fill="%233B82F6" font-size="20" font-family="sans-serif" font-weight="bold" text-anchor="middle">PACKCHECK SAMPLE</text><text x="50%" y="60%" fill="%2394A3B8" font-size="14" font-family="sans-serif" text-anchor="middle">' + fileName.replace('.jpg', '').toUpperCase() + '</text></svg>');
-    triggerAnalysis(fileName);
+    setImagePreview(sampleImg);
+    triggerAnalysis(fileName, sampleImg);
   };
 
   const handleClear = () => {
@@ -236,9 +240,10 @@ export default function Scanner() {
   };
 
   // Execute Analysis with Multi-Step Animated Progress
-  const triggerAnalysis = async (customFile?: string) => {
+  const triggerAnalysis = async (customFile?: string, customImage?: string) => {
     const fileToUse = customFile || uploadedFileName;
-    if (!imagePreview && !fileToUse) return;
+    const imageToUse = customImage || imagePreview;
+    if (!imageToUse && !fileToUse) return;
 
     setLoading(true);
     setResult(null);
@@ -248,7 +253,7 @@ export default function Scanner() {
 
     try {
       const report = await analyzeProductPackaging(
-        imagePreview || 'data:image/jpeg;base64,/9j/4AAQSkZJRg==',
+        imageToUse || 'data:image/jpeg;base64,/9j/4AAQSkZJRg==',
         fileToUse,
         customApiKey,
         (step, pct) => {
@@ -258,12 +263,12 @@ export default function Scanner() {
       );
 
       if (report.error || !report.isFoodPackaging) {
-        setUnidentifiedError(report.error || 'Unable to identify product. Please upload a clearer image of a packaged food label.');
+        setUnidentifiedError(report.error || 'Unable to identify product. Please upload a clearer image.');
         return;
       }
 
       setResult(report);
-      saveInspectionRecord(report, imagePreview || '', coords);
+      saveInspectionRecord(report, imageToUse || '', coords);
       setScanHistory(getStoredInspections());
       setPendingSyncs(getPendingSyncCount());
     } catch {
@@ -662,15 +667,15 @@ export default function Scanner() {
 
           {/* Unidentified Guidance Handling */}
           {!loading && unidentifiedError && (
-            <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '2px dashed rgba(245, 158, 11, 0.4)', borderRadius: '12px' }}>
+            <div style={{ textAlign: 'center', padding: '50px 20px', backgroundColor: 'rgba(251, 146, 60, 0.08)', border: '2px dashed rgba(251, 146, 60, 0.4)', borderRadius: '12px' }}>
               <div style={{ fontSize: '42px', marginBottom: '12px' }}>🔍</div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#F59E0B', margin: '0 0 6px 0' }}>
-                Clearer Label Image Needed
+              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#fb923c', margin: '0 0 8px 0' }}>
+                Unable to identify product.
               </h2>
-              <p style={{ fontSize: '13px', color: '#CBD5E1', maxWidth: '420px', margin: '0 auto 16px auto', lineHeight: '1.5' }}>
-                {unidentifiedError}
+              <p style={{ fontSize: '15px', color: '#CBD5E1', maxWidth: '440px', margin: '0 auto 18px auto', lineHeight: '1.5', fontWeight: 600 }}>
+                Please upload a clearer image.
               </p>
-              <div style={{ backgroundColor: '#0F172A', padding: '10px 16px', borderRadius: '8px', display: 'inline-block', fontSize: '12px', color: '#38BDF8', fontWeight: 700 }}>
+              <div style={{ backgroundColor: '#0F172A', padding: '10px 18px', borderRadius: '8px', display: 'inline-block', fontSize: '12px', color: '#38BDF8', fontWeight: 700 }}>
                 📸 Tip: Ensure the label text is in focus with good lighting.
               </div>
             </div>

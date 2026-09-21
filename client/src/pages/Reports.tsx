@@ -81,8 +81,8 @@ export default function Reports() {
             borderColor: '#f59e0b',
           },
           harmfulItems: [
-            { ingredient: 'Excessive Sugar (54g / 100g)', level: 'HIGH RISK', problem: 'Very high sugar concentration triggering blood glucose spikes.' },
-            { ingredient: 'Preservative (INS 211 Sodium Benzoate)', level: 'MODERATE', problem: 'Chemical preservative restricted under FSSAI limits.' }
+            { ingredient: 'High Simple Sugar (54g / 100g)', level: 'ADVISORY', problem: 'Elevated sugar content. Review against ICMR-NIN recommended thresholds.' },
+            { ingredient: 'Preservative (INS 211 Sodium Benzoate)', level: 'MODERATE', problem: 'Chemical antimicrobial preservative.' }
           ],
           declarations: [
             { name: 'Maximum Retail Price (MRP)', status: 'PASS', details: '₹145 printed with unit price ₹0.29/g' },
@@ -93,12 +93,54 @@ export default function Reports() {
         }
       },
       {
+        id: `DEMO-${Date.now()}-1b`,
+        productName: 'Cadbury Choclairs / Caramel Toffee',
+        brand: 'Mondelez India Foods Pvt. Ltd.',
+        category: 'Sugar Confectionery & Candies',
+        score: 64,
+        statusText: 'ADVISORY ATTENTION',
+        timestamp: new Date(Date.now() - 5400000).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }),
+        imageThumbnail: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="100%" height="100%" fill="%234A044E"/><text x="50%" y="45%" fill="%23F43F5E" font-size="28" font-family="sans-serif" text-anchor="middle">🍬</text><text x="50%" y="75%" fill="%23FDF4FF" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle">TOFFEE</text></svg>',
+        geo: {
+          latitude: 26.4510,
+          longitude: 80.3325,
+          district: 'Kanpur (Enforcement Zone 4), Uttar Pradesh',
+          inspectorName: 'Inspector H. K. Nigam',
+          inspectorBadge: 'FSSAI-ENF-704',
+          evidenceHash: 'IND-FSS-5519D-2026',
+        },
+        fullData: {
+          brand: 'Mondelez India Foods Pvt. Ltd.',
+          category: 'Sugar Confectionery & Candies',
+          fssaiLicense: '10014022002711',
+          mrp: '₹ 50.00 (Incl. of taxes)',
+          netWeight: '200 g',
+          verdict: {
+            title: 'CONFECTIONERY ADVISORY • HFSS REVIEW 💡',
+            subtext: 'High simple sugars (62g/100g) and hydrogenated vegetable fat. Recommended for occasional consumption.',
+            color: '#fb923c',
+            bgColor: 'rgba(251, 146, 60, 0.12)',
+            borderColor: '#fb923c',
+          },
+          harmfulItems: [
+            { ingredient: 'Refined Sugar & Liquid Glucose (62%)', level: 'ADVISORY', problem: 'Rapid glycemic spike; tooth decay risk in young consumers.' },
+            { ingredient: 'Hydrogenated Vegetable Oil', level: 'MODERATE', problem: 'Contains elevated saturated fatty acids.' }
+          ],
+          declarations: [
+            { name: 'Maximum Retail Price (MRP)', status: 'PASS', details: '₹50.00 declared' },
+            { name: 'Net Quantity', status: 'PASS', details: '200 g standard metric' },
+            { name: 'FSSAI License', status: 'PASS', details: '10014022002711 verified' },
+            { name: 'Consumer Grievance Helpline', status: 'PASS', details: 'Toll-free 1800-22-7080' }
+          ]
+        }
+      },
+      {
         id: `DEMO-${Date.now()}-2`,
         productName: 'Kurkure Masala Munch',
         brand: 'PepsiCo India Holdings Pvt. Ltd.',
         category: 'Extruded Savory Snack (Namkeen)',
         score: 58,
-        statusText: 'STATUTORY WARNING',
+        statusText: 'ADVISORY ATTENTION',
         timestamp: new Date(Date.now() - 7200000).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }),
         imageThumbnail: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="100%" height="100%" fill="%237C2D12"/><text x="50%" y="45%" fill="%23FB923C" font-size="28" font-family="sans-serif" text-anchor="middle">🌶️</text><text x="50%" y="75%" fill="%23FFF7ED" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle">KURKURE</text></svg>',
         geo: {
@@ -123,7 +165,7 @@ export default function Reports() {
             borderColor: '#fb923c',
           },
           harmfulItems: [
-            { ingredient: 'Refined Palmolein Oil (48% Saturated Fat)', level: 'HIGH RISK', problem: 'Elevated saturated fatty acids linked to LDL cholesterol.' },
+            { ingredient: 'Refined Palmolein Oil (48% Saturated Fat)', level: 'ADVISORY', problem: 'Elevated saturated fatty acids. Transparent front-of-pack labeling advised.' },
             { ingredient: 'Flavor Enhancers (INS 627, INS 631)', level: 'MODERATE', problem: 'Disodium inosinate & guanylate appetite stimulants.' }
           ],
           declarations: [
