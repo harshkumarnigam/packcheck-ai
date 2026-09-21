@@ -303,15 +303,66 @@ footer small { color: var(--muted); }
   overflow-x: clip;
 }
 
+/* 1-Click Mobile Horizontal Navigation Strip */
+.mobile-quick-nav-strip {
+  display: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #080e1a;
+  border-bottom: 1px solid #1e293b;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 60px;
+  z-index: 95;
+}
+
+.mobile-quick-nav-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-pill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 20px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.quick-pill-item:hover, .quick-pill-item:active {
+  border-color: #38bdf8;
+  color: #f8fafc;
+}
+
+.quick-pill-item.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
 @media (max-width: 768px) {
   .desktop-nav { display: none !important; }
   .mobile-hamburger-btn { display: flex !important; }
   .mobile-bottom-nav { display: flex !important; }
-  body, .app { padding-bottom: 70px !important; }
+  .mobile-quick-nav-strip { display: flex !important; }
+  body, .app { padding-bottom: 75px !important; }
 }
 
 @media print {
-  .nav, footer, .page-head, .upload-card { display: none !important; }
+  .nav, footer, .page-head, .upload-card, .mobile-quick-nav-strip, .mobile-bottom-nav { display: none !important; }
   .page { padding: 0; }
   .scanner-grid { display: block; }
   .result-card { border: 0; box-shadow: none; }

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Reports from './pages/Reports';
 import Rules from './pages/Rules';
 import About from './pages/About';
+import Footer from './components/Footer';
 import { samples } from './data/samples';
 
 function toScannerSample(index: number) {
@@ -75,6 +76,8 @@ export default function App() {
         <Route path="/rules" element={<Rules />} />
         <Route path="/about" element={<About />} />
       </Routes>
+
+      <Footer nav={navigate} />
     </div>
   );
 }

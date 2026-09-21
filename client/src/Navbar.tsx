@@ -24,12 +24,12 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Scanner', path: '/scanner' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Reports', path: '/reports' },
-    { name: 'Rules', path: '/rules' },
-    { name: 'About', path: '/about' },
+    { name: 'Home', path: '/', icon: '🏠' },
+    { name: 'Scanner', path: '/scanner', icon: '📷' },
+    { name: 'Dashboard', path: '/dashboard', icon: '📊' },
+    { name: 'Reports', path: '/reports', icon: '📋' },
+    { name: 'Rules', path: '/rules', icon: '⚖️' },
+    { name: 'About', path: '/about', icon: 'ℹ️' },
   ];
 
   return (
@@ -74,7 +74,7 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="desktop-nav" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <nav className="desktop-nav" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             {navLinks.map((link) => {
               const isActive = currentPath === link.path;
               return (
@@ -83,12 +83,21 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
                   to={link.path}
                   style={{
                     textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: isActive ? 700 : 400,
+                    fontSize: '13px',
+                    fontWeight: isActive ? 800 : 500,
                     color: isActive ? '#38bdf8' : '#94a3b8',
+                    padding: '6px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
+                    border: isActive ? '1px solid rgba(56, 189, 248, 0.25)' : '1px solid transparent',
+                    transition: 'all 0.15s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px'
                   }}
                 >
-                  {link.name}
+                  <span>{link.icon}</span>
+                  <span>{link.name}</span>
                 </Link>
               );
             })}
@@ -151,6 +160,23 @@ export default function Navbar({ theme, toggleTheme, currentPath }: any) {
           </button>
         </div>
       </header>
+
+      {/* 1-Click Mobile Horizontal Quick Navigation Strip */}
+      <nav className="mobile-quick-nav-strip" aria-label="1-Click Quick Navigation">
+        {navLinks.map((link) => {
+          const isActive = currentPath === link.path;
+          return (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`quick-pill-item ${isActive ? 'active' : ''}`}
+            >
+              <span>{link.icon}</span>
+              <span>{link.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (

@@ -29,12 +29,17 @@ export default function Reports() {
     try {
       const saved = localStorage.getItem('packcheck_scan_history');
       if (saved) {
-        setReports(JSON.parse(saved));
-      } else {
-        setReports([]);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setReports(parsed);
+          setSelectedReport(parsed[0]);
+          return;
+        }
       }
+      // Auto-load rich demo data so page is never empty and opens with 1-click ready data!
+      loadDemoReports();
     } catch {
-      setReports([]);
+      loadDemoReports();
     }
   };
 
